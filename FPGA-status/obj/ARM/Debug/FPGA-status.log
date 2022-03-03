@@ -1,0 +1,55 @@
+﻿  Validating sources
+  Copying sources remotely to '192.168.0.119'
+  Validating architecture
+  Validating architecture
+  Starting remote build
+  Compiling sources:
+  alt_fpga_manager.c
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(213,81): warning : unsigned conversion from 'int' to 'uint32_t' {aka 'unsigned int'} changes value from '-4' to '4294967292' [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(213,81): warning :   213 |         const uint32_t * buffer_32 = (const uint32_t *) (cfg_buf + (cfg_buf_len & ~0x3));
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(213,81): warning :       |                                                                                 ^
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(217,91): warning : unsigned conversion from 'int' to 'unsigned int' changes value from '-2' to '4294967294' [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(217,91): warning :   217 | #define     alt_clrbits_word(dest, bits)        (alt_write_word(dest, alt_read_word(dest) & ~(bits)))
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(217,91): warning :       |                                                                                           ^
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(126,84): message : in definition of macro 'alt_write_word'
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(126,84): message :   126 | #define alt_write_word(dest, src)       (*ALT_CAST(volatile uint32_t *, (dest)) = (src))
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(126,84): message :       |                                                                                    ^~~
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(387,5): message : in expansion of macro 'alt_clrbits_word'
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(387,5): message :   387 |     alt_clrbits_word(ALT_FPGAMGR_CTL_ADDR, ALT_FPGAMGR_CTL_EN_SET_MSK);
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(387,5): message :       |     ^~~~~~~~~~~~~~~~
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(217,91): warning : unsigned conversion from 'int' to 'unsigned int' changes value from '-5' to '4294967291' [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(217,91): warning :   217 | #define     alt_clrbits_word(dest, bits)        (alt_write_word(dest, alt_read_word(dest) & ~(bits)))
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(217,91): warning :       |                                                                                           ^
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(126,84): message : in definition of macro 'alt_write_word'
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(126,84): message :   126 | #define alt_write_word(dest, src)       (*ALT_CAST(volatile uint32_t *, (dest)) = (src))
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\socal.h(126,84): message :       |                                                                                    ^~~
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(461,5): message : in expansion of macro 'alt_clrbits_word'
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(461,5): message :   461 |     alt_clrbits_word(ALT_FPGAMGR_CTL_ADDR, ALT_FPGAMGR_CTL_NCFGPULL_SET_MSK);
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(461,5): message :       |     ^~~~~~~~~~~~~~~~
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(570,61): warning : conversion to 'uint32_t' {aka 'unsigned int'} from 'int32_t' {aka 'int'} may change the sign of the result [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(570,61): warning :   570 |                 status = alt_fpga_internal_writeaxi(buffer, cb_status
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(570,61): warning :       |                                                             ^~~~~~~~~
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(577,28): warning : conversion to 'uint32_t' {aka 'unsigned int'} from 'int32_t' {aka 'int'} may change the sign of the result [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(577,28): warning :   577 |                 data_limit -= cb_status;
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(577,28): warning :       |                            ^~
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1010,23): warning : unsigned conversion from 'int' to 'unsigned int' changes value from '-4096' to '4294963200' [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1010,23): warning :  1010 |     if (mon_stat_mask & ~((1 << 12) - 1))
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1010,23): warning :       |                       ^
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1025,23): warning : unsigned conversion from 'int' to 'unsigned int' changes value from '-4096' to '4294963200' [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1025,23): warning :  1025 |     if (mon_stat_mask & ~((1 << 12) - 1))
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1025,23): warning :       |                       ^
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1044,23): warning : unsigned conversion from 'int' to 'unsigned int' changes value from '-4096' to '4294963200' [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1044,23): warning :  1044 |     if (mon_stat_mask & ~((1 << 12) - 1))
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1044,23): warning :       |                       ^
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1063,23): warning : unsigned conversion from 'int' to 'unsigned int' changes value from '-4096' to '4294963200' [-Wsign-conversion]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1063,23): warning :  1063 |     if (mon_stat_mask & ~((1 << 12) - 1))
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\alt_fpga_manager.c(1063,23): warning :       |                       ^
+  main.cpp
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\main.cpp(18): warning : ignoring #pragma region convert [-Wunknown-pragmas]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\main.cpp(18): warning :    18 | #pragma region convert to string
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\main.cpp(18): warning :       |
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\main.cpp(62): warning : ignoring #pragma endregion  [-Wunknown-pragmas]
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\main.cpp(62): warning :    62 | #pragma endregion
+D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\main.cpp(62): warning :       |
+  Linking objects
+  FPGA-status.vcxproj -> D:\Tresorit\Robin\GithubProjects\rstoolsCY5\FPGA-status\bin\ARM\Debug\FPGA-status.out
