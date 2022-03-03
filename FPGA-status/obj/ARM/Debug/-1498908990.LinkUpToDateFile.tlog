@@ -1,1 +1,0 @@
-g++ -o "/home/root/projects/FPGA-status/bin/ARM/Debug/FPGA-status.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack "/home/root/projects/FPGA-status/obj/ARM/Debug/alt_fpga_manager.o" "/home/root/projects/FPGA-status/obj/ARM/Debug/main.o"

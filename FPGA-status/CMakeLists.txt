@@ -1,13 +1,10 @@
-cmake_minimum_required(VERSION 2.4)
-project(FPGA-status)
+cmake_minimum_required(VERSION 3.0.0)
+project(FPGA-status VERSION 0.1.0)
 
-add_executable(FPGA-status
-main.cpp
-alt_fpga_manager.c
-alt_fpga_manager.h
-hps.h
-hwlib.h
-socal.h
-alt_fpgamgr.h
-alt_printf.h
-)
+include(CTest)
+enable_testing()
+
+add_executable(FPGA-status main.cpp)
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
