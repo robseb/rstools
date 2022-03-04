@@ -20,8 +20,6 @@
 
 
 #include <iostream>
-
-
 #include <fstream>					// POSIX: for acessing Linux drivers
 #include <sys/mman.h>				// POSIX: memory maping
 #include <fcntl.h>					// POSIX: "PROT_WRITE", "MAP_SHARED", ...
