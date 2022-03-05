@@ -8,11 +8,11 @@
  * rstools application to read the Status of the FPGA Fabric
  * and the Bridges between the HPS and FPGA 
  * 
- * Chnage Log: 
+ * Change Log:  
  * 		1.00 (03-03-2022)
  * 		Initial release
  * 
- * Copyright (C) 2021-2022 rsyocto GmbH & Co. KG  *  All Rights Reserved
+ * Copyright (C) 2020-2022 rsyocto GmbH & Co. KG  *  All Rights Reserved
  * 
  */
 
@@ -651,7 +651,7 @@ int main(int argc, const char* argv[])
 		cout << "	FPGA-status" << endl;
 		cout << "		Read the status with detailed output" << endl;
 		cout <<endl <<"Vers.: "<<VERSION<<endl;
-		cout <<"Copyright (C) 2021-2022 rsyocto GmbH & Co. KG" << endl;
+		cout <<"Copyright (C) 2020-2022 rsyocto GmbH & Co. KG" << endl;
 
 	}
 	else
