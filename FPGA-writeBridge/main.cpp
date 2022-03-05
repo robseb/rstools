@@ -10,13 +10,15 @@
  * 
  * Change Log: 
  * 		1.00 (12-07-2019)
- * 		Initial release
+ * 			Initial release
+ * 		1.10 (03-05-2022)
+ * 			GPO Mode and updated design
  * 
  * Copyright (C) 2020-2022 rsyocto GmbH & Co. KG  *  All Rights Reserved
  * 
  */
 
-#define VERSION "1.00"
+#define VERSION "1.10"
 
 #include <cstdio>
 #include <iostream>
@@ -126,10 +128,10 @@ int main(int argc, const char* argv[])
 		bool ConsloeOutput = true;
 
 		// check the Value input type (dec,hex,bin)
-		if ((argc-arg_no >= 4) && (std::string(argv[3-arg_no]) == "-h"))
+		if ((argc >= 4-arg_no) && (std::string(argv[3-arg_no]) == "-h"))
 			DecHexBin = HEX_INPUT;
 
-		if ((argc-arg_no > 4) && (std::string(argv[3-arg_no]) == "-b"))
+		if ((argc > 4-arg_no) && (std::string(argv[3-arg_no]) == "-b"))
 			DecHexBin = BIN_INPUT;
 
 		string ValueString;
@@ -214,7 +216,7 @@ int main(int argc, const char* argv[])
 			{
 				// address input is not vailed
 				if (ConsloeOutput)
-					cout << "	ERROR: selected address input is no hex address!" << endl;
+					cout << "[  ERROR  ]  Selected Address Input is no HEX Address!" << endl;
 				InputVailed = false;
 			}
 		}
@@ -223,8 +225,8 @@ int main(int argc, const char* argv[])
 		if (DecHexBin == BIN_INPUT)
 		{
 			// read and check the Pos input value
-			string SetInputString = argv[5];
-			string BitPosString = argv[4];
+			string SetInputString = argv[5-arg_no];
+			string BitPosString = argv[4-arg_no];
 			InputVailed = false;
 
 			// check if the Bit pos value input is okay
@@ -320,7 +322,7 @@ int main(int argc, const char* argv[])
 					}
 					else
 					{
-						cout << "   Brige Base: 32-bit GPI (General-Purpose Input Register) FPGA->HPS " << endl;
+						cout << "   Brige Base: 32-bit GPO (General-Purpose Output Register) HPS->FPGA " << endl;
 						cout << "   Address:     0x" << hex << FPGAMAN_GPO_OFST << dec << endl;
 						if (DecHexBin == BIN_INPUT)
 							cout << "   Value:       " << BinValueStr<<endl;
@@ -328,90 +330,83 @@ int main(int argc, const char* argv[])
 							cout << "   Value:       " << ValueInput <<hex<<" [0x"<< ValueInput<<"]"<<dec<<endl;
 					}
 				}
+			}
+			do
+			{
+				void* bridgeMap;
+				int fd;
 
-				do
+				// open memory driver 
+				fd = open("/dev/mem", (O_RDWR | O_SYNC));
+
+				// was opening okay
+				if (fd < 0)
 				{
-					void* bridgeMap;
-					int fd;
-
-					// open memory driver 
-					fd = open("/dev/mem", (O_RDWR | O_SYNC));
-
-					// was opening okay
-					if (fd < 0)
-					{
-						if (ConsloeOutput)
-							cout << "ERROR: Failed to open memory driver!" << endl;
-						else
-							cout << -2;
-						break;
-					}
-
-					// configure a virtual memory interface to the bridge or mpu
-					bridgeMap = mmap(NULL, MAP_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, \
-						address & ~MAP_MASK);
-
-					// check if opening was sucsessful
-					if (bridgeMap == MAP_FAILED)
-					{
-						if (ConsloeOutput)
-							cout << "ERROR: Accesing the virtual memory failed!" << endl;
-						else
-							cout << -2;
-						close(fd);
-						return 0;
-					}
-
-					// access to Bridge is okay 
-					// write the value to the address 
-					void* write_bridge = bridgeMap +(address & MAP_MASK);
-
-					uint16_t delay_count = 0;
-					uint32_t value = *((uint32_t*)write_bridge);
-					// print also the old value of the selected register
 					if (ConsloeOutput)
-					{
-						cout << "   old Value:   " << value << " [0x" << hex << value << "]" << dec << endl;
-					}
-		
-					// write the value to the address 
-
-					// write the new value to the selected register
-					
-					if (DecHexBin == BIN_INPUT)
-					{
-						if (SetResetBit) *((uint32_t*)write_bridge) |= (1 << BitPosValue);
-						else			 *((uint32_t*)write_bridge) &= ~(1 << BitPosValue);
-					}
+						cout << "ERROR: Failed to open memory driver!" << endl;
 					else
-						*((uint32_t*)write_bridge) = ValueInput;
-					
+						cout << -2;
+					break;
+				}
 
-					// Close the MAP 
-					if (munmap(bridgeMap, MAP_SIZE) < 0)
-					{
-						if (ConsloeOutput)
-							cout << "[ ERROR ] Closing of shared memory failed!" << endl;
-							else cout << -2;
-					}
+				// configure a virtual memory interface to the bridge or mpu
+				bridgeMap = mmap(NULL, MAP_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, \
+					address & ~MAP_MASK);
+
+				// check if opening was sucsessful
+				if (bridgeMap == MAP_FAILED)
+				{
+					if (ConsloeOutput)
+						cout << "ERROR: Accesing the virtual memory failed!" << endl;
+					else
+						cout << -2;
+					close(fd);
+					return 0;
+				}
+
+				// access to Bridge is okay 
+				// write the value to the address 
+				void* write_bridge = bridgeMap +(address & MAP_MASK);
+
+				uint16_t delay_count = 0;
+				uint32_t value = *((uint32_t*)write_bridge);
+				// print also the old value of the selected register
+				if (ConsloeOutput)
+				{
+					cout << "   old Value:   " << value << " [0x" << hex << value << "]" << dec << endl;
+				}
+
+				// write the value to the address 
+
+				// write the new value to the selected register
+				
+				if (DecHexBin == BIN_INPUT)
+				{
+					if (SetResetBit) *((uint32_t*)write_bridge) |= (1 << BitPosValue);
+					else			 *((uint32_t*)write_bridge) &= ~(1 << BitPosValue);
+				}
+				else
+					*((uint32_t*)write_bridge) = ValueInput;
 				
 
-					// close the driver port 
-					close(fd);
-
+				// Close the MAP 
+				if (munmap(bridgeMap, MAP_SIZE) < 0)
+				{
 					if (ConsloeOutput)
-						cout << "[  INFO  ]  Writing was successful " << endl;
-					else
-						cout << 1;
+						cout << "[ ERROR ] Closing of shared memory failed!" << endl;
+						else cout << -2;
+				}
+			
 
-				} while (0);
-			}
-			else
-			{
-				// the user input is not okay 
-				if (!ConsloeOutput)
-					cout << -1;
-			}
+				// close the driver port 
+				close(fd);
+
+				if (ConsloeOutput)
+					cout << "[  INFO  ]  Writing was successful " << endl;
+				else
+					cout << 1;
+
+			} while (0);
 		}
 		else
 		{
@@ -458,7 +453,7 @@ int main(int argc, const char* argv[])
 		cout << "|      Suffix: -b -> only decimal result output                                              |" << endl;
 		cout << "|                     L  1 = Written successfully                                            |" << endl;
 		cout << "|                     L -1 = Input Error                                                     |" << endl;
-		cout << "|                     L -2 = Linux Kernel Memory Error                                       |" << endl;
+		cout << "|                     L -2 = Linux Kernel Memory Driver Error                                |" << endl;
 		cout << "|$ FPGA-writeBridge -lw|hf|mpu| <offset address in hex>                                      |" << endl;
 		cout << "|                       -h|-b|<value dec> <value hex>|<bit pos> <bit value>  -b              |" << endl;
 		cout << "|$ FPGA-writeBridge -gpo -h|-b|<value dec> <value hex>|<bit pos> <bit value>  -b             |" << endl;
