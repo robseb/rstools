@@ -56,7 +56,14 @@ using namespace std;
 #define REFRECHMODE_DURATION_MS 15000
 #define REFRECHMODE_MAX_COUNT   (REFRECHMODE_DURATION_MS/REFRECHMODE_DELAY_MS)
 
-bool checkIfInputIsVailed(string input, bool DecHex)
+/*
+*	@param	Check that the Input is a valid HEX or DEC String
+*   @param  input 		String to check
+*   @param  DecHex		True  ==> DEC Mode
+*   					False ==> HEX Mode
+*	@return is Valid
+*/
+bool checkIfInputIsVailed(std::string input, bool DecHex)
 {
 	if (input.length() < 1) return false;
 	uint16_t i = 0;
@@ -109,7 +116,7 @@ int main(int argc, const char* argv[])
 
 		bool ConsloeOutput = true;
 		bool refreshMode = false;
-		string ValueString;
+		std::string ValueString;
 		bool InputVailed = true;
 
 		// check if only decimal output is enabled 
@@ -124,13 +131,22 @@ int main(int argc, const char* argv[])
 		if(!gpi_read_mode)
 		{
 			/// Check the user inputs ///
-			string AddresshexString = argv[2];
+			std::string AddresshexString = argv[2];
 	
 			// check if the address hex input is vailed
 			if (checkIfInputIsVailed(AddresshexString, false))
 			{
 				istringstream buffer(AddresshexString);
 				buffer >> hex >> addressOffset;
+
+
+				// Address must be a 32-bit address
+				if (addressOffset % 4 >0)
+				{
+					cout << "[ ERROR ]  The Address 0x"<<hex<<addressOffset<<" is not not a 32-bit Address" <<endl;
+					cout << "           Use the next lower address: 0x"<<(addressOffset-(addressOffset%4))<<dec<<endl;
+					InputVailed = false;
+				}
 
 				// HPS2FPGA
 				if (address_space == 0)
@@ -163,7 +179,8 @@ int main(int argc, const char* argv[])
 					if (addressOffset > MPU_RANGE)
 					{
 						if (ConsloeOutput)
-							cout << "	ERROR: selected address is outside MPU (HPS) address range!" << endl;
+							cout << "[  ERROR  ] RROR: selected address is outside of"\
+						"the HPS Address range!" << endl;
 						InputVailed = false;
 					}
 				}
@@ -172,7 +189,7 @@ int main(int argc, const char* argv[])
 			{
 				// address input is not vadid
 				if (ConsloeOutput)
-					cout << "	ERROR: selected address input is no hex address!" << endl;
+					cout << "[  ERROR  ] Selected Value Input is a HEX Address!" << endl;
 				InputVailed = false;
 			}
 
@@ -228,7 +245,7 @@ int main(int argc, const char* argv[])
 					break;
 				}
 
-				bridgeMap = mmap(NULL, MAP_SIZE, PROT_READ, MAP_SHARED, fd, \
+				bridgeMap = mmap(NULL, 4, PROT_READ, MAP_PRIVATE, fd, \
 						address & ~MAP_MASK);
 				// check if opening was successfully
 				if (bridgeMap == MAP_FAILED)
@@ -307,7 +324,7 @@ int main(int argc, const char* argv[])
 				} while (delay_count<REFRECHMODE_MAX_COUNT);
 
 				// Close the MAP 
-				if (munmap(bridgeMap, MAP_SIZE) < 0)
+				if (munmap(bridgeMap, 4) < 0)
 				{
 					if (ConsloeOutput)
 						cout << "[ ERROR ] Closing of shared memory failed!" << endl;

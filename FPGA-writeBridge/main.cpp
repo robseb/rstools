@@ -57,8 +57,15 @@ using namespace std;
 #define MAP_SIZE 4096UL
 #define MAP_MASK (MAP_SIZE - 1)
 
-#pragma region Check user input 
-bool checkIfInputIsVailed(string input, bool DecHex)
+
+/*
+*	@param	Check that the Input is a valid HEX or DEC String
+*   @param  input 		String to check
+*   @param  DecHex		True  ==> DEC Mode
+*   					False ==> HEX Mode
+*	@return is Valid
+*/
+bool checkIfInputIsVailed(std::string input, bool DecHex)
 {
 	if (input.length() < 1) return false;
 	uint16_t i = 0;
@@ -78,7 +85,7 @@ bool checkIfInputIsVailed(string input, bool DecHex)
 
 	return false;
 }
-#pragma endregion
+
 
 int main(int argc, const char* argv[])
 {
@@ -134,7 +141,7 @@ int main(int argc, const char* argv[])
 		if ((argc > 4-arg_no) && (std::string(argv[3-arg_no]) == "-b"))
 			DecHexBin = BIN_INPUT;
 
-		string ValueString;
+		std::string ValueString;
 
 		switch (DecHexBin)
 		{
@@ -162,12 +169,12 @@ int main(int argc, const char* argv[])
 		uint32_t BitPosValue = 0;
 		uint32_t SetResetBit = 0;
 		uint32_t addressOffset = 0;
-		string BinValueStr="";
+		std::string BinValueStr="";
 
 		/// Check Address Input ///
 		if(!gpo_write_mode)
 		{
-			string AddresshexString =argv[2];
+			std::string AddresshexString =argv[2];
 		
 			// check if the address hex input is vailed
 			
@@ -175,6 +182,14 @@ int main(int argc, const char* argv[])
 			{
 				istringstream buffer(AddresshexString);
 				buffer >> hex >> addressOffset;
+
+				// Address must be a 32-bit address
+				if (addressOffset % 4 >0)
+				{
+					cout << "[ ERROR ]  The Address 0x"<<hex<<addressOffset<<" is not not a 32-bit Address" <<endl;
+					cout << "           Use the next lower address: 0x"<<(addressOffset-(addressOffset%4))<<dec<<endl;
+					InputVailed = false;
+				}
 
 				// HPS2FPGA
 				if (address_space == 0)
@@ -207,7 +222,8 @@ int main(int argc, const char* argv[])
 					if (addressOffset > MPU_RANGE)
 					{
 						if (ConsloeOutput)
-							cout << "[  ERROR  ]  Selected Address is outside MPU (HPS) Address Range!" << endl;
+							cout << "[  ERROR  ] RROR: selected address is outside of"\
+						"the HPS Address range!" << endl;
 						InputVailed = false;
 					}
 				}
@@ -216,7 +232,7 @@ int main(int argc, const char* argv[])
 			{
 				// address input is not vailed
 				if (ConsloeOutput)
-					cout << "[  ERROR  ]  Selected Address Input is no HEX Address!" << endl;
+					cout << "[  ERROR  ]  Selected Address Input is not a HEX Address!" << endl;
 				InputVailed = false;
 			}
 		}
@@ -225,8 +241,8 @@ int main(int argc, const char* argv[])
 		if (DecHexBin == BIN_INPUT)
 		{
 			// read and check the Pos input value
-			string SetInputString = argv[5-arg_no];
-			string BitPosString = argv[4-arg_no];
+			std::string SetInputString = argv[5-arg_no];
+			std::string BitPosString = argv[4-arg_no];
 			InputVailed = false;
 
 			// check if the Bit pos value input is okay
@@ -271,7 +287,7 @@ int main(int argc, const char* argv[])
 				if (ValueInputTemp > UINT32_MAX)
 				{
 					if (ConsloeOutput)
-						cout << "	ERROR: selected Value greater the 32 bit" << endl;
+						cout << "[  ERROR  ] Selected value greater than 32 bits" << endl;
 					InputVailed = false;
 				}
 
@@ -281,7 +297,7 @@ int main(int argc, const char* argv[])
 			{
 				// value input is not vailed
 				if (ConsloeOutput)
-					cout << "	ERROR: selected value is input is not vailed!" << endl;
+					cout << "[  ERROR  ] Selected Value is Input is not vailed!" << endl;
 				InputVailed = false;
 			}
 		}
@@ -350,7 +366,7 @@ int main(int argc, const char* argv[])
 				}
 
 				// configure a virtual memory interface to the bridge or mpu
-				bridgeMap = mmap(NULL, MAP_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, \
+				bridgeMap = mmap(NULL, 4, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, \
 					address & ~MAP_MASK);
 
 				// check if opening was sucsessful
@@ -390,7 +406,7 @@ int main(int argc, const char* argv[])
 				
 
 				// Close the MAP 
-				if (munmap(bridgeMap, MAP_SIZE) < 0)
+				if (munmap(bridgeMap, 4) < 0)
 				{
 					if (ConsloeOutput)
 						cout << "[ ERROR ] Closing of shared memory failed!" << endl;
