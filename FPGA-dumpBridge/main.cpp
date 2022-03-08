@@ -47,7 +47,6 @@ using namespace std;
 #define LWHPSFPGA_END   	0xFF3FFFFF
 #define HPSFPGA_END     	0xFBFFFFFF
 #define MPU_END         	0xFFFFFFFF
-space
 // Bridge interface range (allowed input offset)
 #define LWH2F_RANGE    (LWHPSFPGA_END - LWHPSFPGA_OFST)
 #define H2F_RANGE      (HPSFPGA_END - HPSFPGA_OFST)
