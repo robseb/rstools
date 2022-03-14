@@ -10,13 +10,15 @@
  * 
  * Change Log:  
  * 		1.00 (03-07-2022)
- * 		Initial release
+ * 			Initial release
+ * 		1.01 (03-14-2022)
+ * 			Bug fix in base address of dump
  * 
  * Copyright (C) 2020-2022 rsyocto GmbH & Co. KG  *  All Rights Reserved
  * 
  */
 
-#define VERSION "1.00"
+#define VERSION "1.01"
 
 #include <cstdio>
 #include <iostream>
@@ -33,7 +35,7 @@
 using namespace std;
 
 // Application specific configurations
-#define APP_MAX_ROW			300 
+#define APP_MAX_ROW			280 	// Maximum number of allowed print-out rows
 
 
 // Bridge Interfaces Base addresses 
@@ -220,7 +222,7 @@ int main(int argc, const char* argv[])
 		}
 		else
 		{
-			// address input is not vadid
+			// Address input is not vadid
 
 			cout << "[  ERROR  ] Selected Value Input is not HEX Address!" << endl;
 			InputVailed = false;
@@ -229,14 +231,14 @@ int main(int argc, const char* argv[])
 		if (address_space < 2)
 			address_start = (lwBdrige ? LWHPSFPGA_OFST : HPSFPGA_OFST) + addressStartOffset;
 		else
-			address_start = addressStartOffset+addressEndOffset;
+			address_start = addressStartOffset;
 		
 		address_end  = address_start +addressEndOffset;
-
+ 
 		// only in case the input is valid read the bridge
 		if (InputVailed)
 		{
-			cout << "-----------------------------------------MEMORY DUMP --------------------------------------------------" << endl;
+			cout << "---------------------------------------- MEMORY DUMP --------------------------------------------------" << endl;
 			if (address_space < 2)
 			{
 				cout << "	Bridge:      " << (lwBdrige ? "Lightweight HPS-to-FPGA" : "HPS-to-FPGA");
@@ -295,7 +297,6 @@ int main(int argc, const char* argv[])
 					cout << "-------------------------------------------------------------------------------------------------------" << endl;
 				}
 				
-
 				// Write row after row 
 				for (uint16_t row=0; row<=addressEndOffset; row+=16)
 				{
