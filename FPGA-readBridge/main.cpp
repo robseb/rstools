@@ -208,22 +208,22 @@ int main(int argc, const char* argv[])
 				cout << "------------------------------------READING------------------------------------------" << endl;
 				if (address_space < 2)
 				{
-					cout << "	Bridge:      " << (lwBdrige ? "Lightweight HPS-to-FPGA" : "HPS-to-FPGA");
-					cout << "	   Brige Base:  0x" << hex << (lwBdrige ? LWHPSFPGA_OFST : HPSFPGA_OFST) << dec << endl;
-					cout << "	Your Offset: 0x" << hex << addressOffset << dec;
-					cout << "	Address:     0x" << hex << address << dec << endl;
+					cout << "   Bridge:      " << (lwBdrige ? "Lightweight HPS-to-FPGA" : "HPS-to-FPGA");
+					cout << "      Brige Base:  0x" << hex << (lwBdrige ? LWHPSFPGA_OFST : HPSFPGA_OFST) << dec << endl;
+					cout << "   Your Offset: 0x" << hex << addressOffset << dec;
+					cout << "   Address:     0x" << hex << address << dec << endl;
 				}
 				else 
 				{	
 					if (!gpi_read_mode)
 					{
 						cout << "   Brige Base:  0x00 (MPU Address Space)"<< endl;
-						cout << "	Address:     0x" << hex << address << dec << endl;
+						cout << "   Address:     0x" << hex << address << dec << endl;
 					}
 					else
 					{
 						cout << "   Brige Base: 32-bit GPI (General-Purpose Input Register) FPGA->HPS " << endl;
-						cout << "	Address:     0x" << hex << FPGAMAN_GPI_OFST << dec << endl;
+						cout << "   Address:     0x" << hex << FPGAMAN_GPI_OFST << dec << endl;
 					}
 				}
 			}

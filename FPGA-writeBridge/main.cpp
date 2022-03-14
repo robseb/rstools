@@ -13,6 +13,8 @@
  * 			Initial release
  * 		1.10 (03-05-2022)
  * 			GPO Mode and updated design
+ * 		1.11 (03-14-2022)
+ * 			Bug fix of writing to POSIX I/O
  * 
  * Copyright (C) 2020-2022 rsyocto GmbH & Co. KG  *  All Rights Reserved
  * 
@@ -56,7 +58,6 @@ using namespace std;
 
 #define MAP_SIZE 4096UL
 #define MAP_MASK (MAP_SIZE - 1)
-
 
 /*
 *	@param	Check that the Input is a valid HEX or DEC String
@@ -243,7 +244,7 @@ int main(int argc, const char* argv[])
 			// read and check the Pos input value
 			std::string SetInputString = argv[5-arg_no];
 			std::string BitPosString = argv[4-arg_no];
-			InputVailed = false;
+			
 
 			// check if the Bit pos value input is okay
 			if (checkIfInputIsVailed(BitPosString, true))
@@ -251,10 +252,11 @@ int main(int argc, const char* argv[])
 				istringstream buffer(BitPosString);
 				buffer >> BitPosValue;
 
-				if (BitPosValue < 32)
-					InputVailed = true;
+				if (BitPosValue > 32)
+					InputVailed = false;
 			}
-
+			else 
+				InputVailed = false;
 			// read and check the Set or Reset input
 			if (InputVailed && checkIfInputIsVailed(SetInputString, true))
 			{
@@ -264,6 +266,8 @@ int main(int argc, const char* argv[])
 				if (!(SetResetBit==1 || SetResetBit==0))
 					InputVailed = false;
 			}
+			else 
+				InputVailed = false;
 
 			if (SetResetBit==1)	BinValueStr ="|=  (1<<"+BitPosString+")";
 			else				BinValueStr ="&= ~(1<<"+BitPosString+")";
@@ -366,7 +370,7 @@ int main(int argc, const char* argv[])
 				}
 
 				// configure a virtual memory interface to the bridge or mpu
-				bridgeMap = mmap(NULL, 4, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, \
+				bridgeMap = mmap(NULL, MAP_SIZE, PROT_WRITE|PROT_READ, MAP_SHARED, fd, \
 					address & ~MAP_MASK);
 
 				// check if opening was sucsessful
@@ -382,14 +386,13 @@ int main(int argc, const char* argv[])
 
 				// access to Bridge is okay 
 				// write the value to the address 
-				void* write_bridge = bridgeMap +(address & MAP_MASK);
 
 				uint16_t delay_count = 0;
-				uint32_t value = *((uint32_t*)write_bridge);
+				uint32_t* ptrmap = (uint32_t*)(bridgeMap +(address & MAP_MASK));
 				// print also the old value of the selected register
 				if (ConsloeOutput)
 				{
-					cout << "   old Value:   " << value << " [0x" << hex << value << "]" << dec << endl;
+					cout << "   old Value:   " << *ptrmap << " [0x" << hex << *ptrmap << "]" << dec << endl;
 				}
 
 				// write the value to the address 
@@ -398,15 +401,15 @@ int main(int argc, const char* argv[])
 				
 				if (DecHexBin == BIN_INPUT)
 				{
-					if (SetResetBit) *((uint32_t*)write_bridge) |= (1 << BitPosValue);
-					else			 *((uint32_t*)write_bridge) &= ~(1 << BitPosValue);
+					if (SetResetBit) *ptrmap |=  (1 << BitPosValue);
+					else			 *ptrmap &= ~(1 << BitPosValue);
 				}
 				else
-					*((uint32_t*)write_bridge) = ValueInput;
+					*ptrmap = ValueInput;
 				
 
 				// Close the MAP 
-				if (munmap(bridgeMap, 4) < 0)
+				if (munmap(bridgeMap, MAP_SIZE) < 0)
 				{
 					if (ConsloeOutput)
 						cout << "[ ERROR ] Closing of shared memory failed!" << endl;
