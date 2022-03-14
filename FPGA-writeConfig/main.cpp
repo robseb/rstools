@@ -142,10 +142,13 @@ bool writeFPGAconfig(const char* configFileAdress, bool withOutput)
 		if (withOutput)
 			cout << "[ INFO] Performing a reset on all Bridge Interfaces" <<endl;
 		
-		for (uint8_t i=1; i<6;i++)
+		for (uint8_t i=3; i<6;i++)
 		{
 			performHPStoFPGAReset(withOutput,i);
 		}
+
+		// Perform COLD FPGA Reset
+		performHPStoFPGAReset(withOutput,2);
 		return true;
 	}
 
