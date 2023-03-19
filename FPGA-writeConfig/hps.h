@@ -38,33 +38,29 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif  /* __cplusplus */
 
-//
-//  \desc this file is motified by Robin Sebastian (739065)
-//  to allow the usige in normal Linux applications with virtual memory
-//
-//
+
 #define soc_cv_av
 #define LINUX_TASK_MODE
 	
+
+ #include <sys/types.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+volatile void* __hps_virtualAdreess_FPGAMGR;
+volatile void* __hps_virtualAdreess_FPGAMFRDATA;
+volatile int __fd;
 	
 #ifdef LINUX_TASK_MODE 
 	// 
 	// \desc Linux Task Mode:
-	// for normel Linux Taks- and App- devleopment 
-	// Disable this mode to the dirct memory access for Linux Driver develoment
-	// peripherie access over virtual memory
+	// for normal Linux Task- and App- development 
+	// Disable this mode to the direct memory access for Linux Driver development
+	// peripheries access over virtual memory
 	//
-    #include <sys/types.h>
-    #include <sys/mman.h>
-    #include <sys/stat.h>
-    #include <fcntl.h>
-    #include <unistd.h>
-
-    void* __hps_virtualAdreess_FPGAMGR;
-    void* __hps_virtualAdreess_FPGAMFRDATA;
-    int __fd;
 
     //
     // macro to include the virtual Memory 
