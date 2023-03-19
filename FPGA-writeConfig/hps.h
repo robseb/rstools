@@ -51,9 +51,9 @@ extern "C"
 #include <fcntl.h>
 #include <unistd.h>
 
-extern void* __hps_virtualAdreess_FPGAMGR;
-extern void* __hps_virtualAdreess_FPGAMFRDATA;
-extern int __fd;
+extern volatile void* __hps_virtualAdreess_FPGAMGR;
+extern volatile void* __hps_virtualAdreess_FPGAMFRDATA;
+extern volatile int __fd;
 	
 #ifdef LINUX_TASK_MODE 
 
