@@ -28,6 +28,10 @@
 #include <chrono>					// Required for putting task to sleep 
 using namespace std;
 
+extern void* __hps_virtualAdreess_FPGAMGR;
+extern void* __hps_virtualAdreess_FPGAMFRDATA;
+extern int __fd;
+
 bool is_file_exist(const char* fileName)
 {
 	ifstream infile(fileName);
