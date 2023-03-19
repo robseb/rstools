@@ -18,6 +18,10 @@
 #define VERSION "1.00"
 
 
+volatile void* __hps_virtualAdreess_FPGAMGR;
+volatile void* __hps_virtualAdreess_FPGAMFRDATA;
+volatile int __fd;
+
 #include <cstdio>
 #include "alt_fpga_manager.h"
 #include "hps.h"
