@@ -38,6 +38,7 @@
 #ifdef __cplusplus
 extern "C"
 {
+#endif /* __cplusplus */
 
 
 #define soc_cv_av
