@@ -72,12 +72,12 @@ bool performHPStoFPGAReset(bool ConsloeOutput, uint8_t reset_typ)
 	// RESET =1 
 
 	// Perform Cold or Warm FPGA Reset
-	if(reset_typ ==1) 		system("FPGA-writeBridge -mpu 0xFFD05020 -b 6 1 -b");
-	else if(reset_typ ==2)  system("FPGA-writeBridge -mpu 0xFFD05020 -b 7 1 -b");
+	if(reset_typ ==1) 		system( (const char*) "FPGA-writeBridge -mpu 0xFFD05020 -b 6 1 -b");
+	else if(reset_typ ==2)  system( (const char*) "FPGA-writeBridge -mpu 0xFFD05020 -b 7 1 -b");
 	// Perform a Bridge Reset
-	else if(reset_typ==3)	system("FPGA-writeBridge -mpu 0xFFD0501C -b 1 1 -b");
-	else if(reset_typ==4)	system("FPGA-writeBridge -mpu 0xFFD0501C -b 0 1 -b");
-	else if(reset_typ==5)	system("FPGA-writeBridge -mpu 0xFFD0501C -b 2 1 -b");
+	else if(reset_typ==3)	system((const char*) "FPGA-writeBridge -mpu 0xFFD0501C -b 1 1 -b");
+	else if(reset_typ==4)	system((const char*) "FPGA-writeBridge -mpu 0xFFD0501C -b 0 1 -b");
+	else if(reset_typ==5)	system((const char*) "FPGA-writeBridge -mpu 0xFFD0501C -b 2 1 -b");
 
 	// Wait 50ms
 	// C++11: Put this task to sleep 
@@ -87,12 +87,12 @@ bool performHPStoFPGAReset(bool ConsloeOutput, uint8_t reset_typ)
 	// RESET =0
 
 	// Perform Cold or Warm FPGA Reset
-	if(reset_typ ==1) 		system("FPGA-writeBridge -mpu 0xFFD05020 -b 6 0 -b");
-	else if(reset_typ ==2) system("FPGA-writeBridge -mpu 0xFFD05020 -b 7 0 -b");
+	if(reset_typ ==1) 		system((const char*) "FPGA-writeBridge -mpu 0xFFD05020 -b 6 0 -b");
+	else if(reset_typ ==2) system((const char*) "FPGA-writeBridge -mpu 0xFFD05020 -b 7 0 -b");
 	// Perform a Bridge Reset
-	else if(reset_typ==3)	system("FPGA-writeBridge -mpu 0xFFD0501C -b 1 0 -b");
-	else if(reset_typ==4)	system("FPGA-writeBridge -mpu 0xFFD0501C -b 0 0 -b");
-	else if(reset_typ==5)	system("FPGA-writeBridge -mpu 0xFFD0501C -b 2 0 -b");
+	else if(reset_typ==3)	system((const char*) "FPGA-writeBridge -mpu 0xFFD0501C -b 1 0 -b");
+	else if(reset_typ==4)	system((const char*) "FPGA-writeBridge -mpu 0xFFD0501C -b 0 0 -b");
+	else if(reset_typ==5)	system( (const char*) "FPGA-writeBridge -mpu 0xFFD0501C -b 2 0 -b");
 
 	if(ConsloeOutput)
 		cout << "[SUCCESS] Reset performed"<<endl;
