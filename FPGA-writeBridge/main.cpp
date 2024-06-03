@@ -32,7 +32,7 @@
 #include <thread>					// Required for putting task to sleep 
 #include <chrono>					// Required for putting task to sleep 
 #include <sstream>
-
+#include <cstdint>                  // Standard integral types (uint8_t,...)
 using namespace std;
 
 #define DEC_INPUT 1
